@@ -102,6 +102,46 @@ new TSESLint.RuleTester({
     `
     ),
     injectResult(
+      'Call isErr',
+      `
+      const result = getResult()
+
+      if (result.isErr()) {
+        console.error('failure')
+      }
+    `
+    ),
+    injectResult(
+      'Call isOk',
+      `
+      const result = getResult()
+
+      if (result.isOk()) {
+        console.log('success')
+      }
+    `
+    ),
+    injectResult(
+      'Call isErr and use error',
+      `
+      const result = getResult()
+
+      if (result.isErr()) {
+        console.error(result.error)
+      }
+    `
+    ),
+    injectResult(
+      'Call isOk and use value',
+      `
+      const result = getResult()
+
+      if (result.isOk()) {
+        console.log(result.value)
+      }
+    `
+    ),
+    injectResult(
       'Return result from function',
       `
       function main() {

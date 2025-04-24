@@ -25,7 +25,8 @@ const resultProperties = [
   'unwrapOr',
 ];
 
-const handledMethods = ['match', 'unwrapOr', '_unsafeUnwrap'];
+const handledMethods = ['match', 'unwrapOr', '_unsafeUnwrap', 'isErr', 'isOk'];
+const handledProperties = ['error', 'value'];
 
 // evalua dentro de la expresion si es result
 // si es result chequea que sea manejada en el la expresion
@@ -67,13 +68,22 @@ function isMemberCalledFn(node?: TSESTree.MemberExpression): boolean {
 }
 
 function isHandledResult(node: TSESTree.Node): boolean {
-  const memberExpresion = node.parent;
-  if (memberExpresion?.type === 'MemberExpression') {
-    const methodName = findMemberName(memberExpresion);
-    const methodIsCalled = isMemberCalledFn(memberExpresion);
-    if (methodName && handledMethods.includes(methodName) && methodIsCalled) {
-      return true;
+  const memberExpression = node.parent;
+  if (memberExpression?.type === 'MemberExpression') {
+    const memberName = findMemberName(memberExpression);
+
+    if (memberName) {
+      if (isMemberCalledFn(memberExpression)) {
+        if (handledMethods.includes(memberName)) {
+          return true;
+        }
+      }
+
+      if (handledProperties.includes(memberName)) {
+        return true;
+      }
     }
+
     const parent = node.parent?.parent; // search for chain method .map().handler
     if (parent && parent?.type !== 'ExpressionStatement') {
       return isHandledResult(parent);
@@ -194,7 +204,7 @@ const rule: TSESLint.RuleModule<MessageIds, []> = {
     },
     messages: {
       mustUseResult:
-        'Result must be handled with either of match, unwrapOr or _unsafeUnwrap.',
+        'Result must be handled with either of match, unwrapOr or _unsafeUnwrap. It can be handled manually using isErr or isOk.',
     },
     schema: [],
     type: 'problem',
