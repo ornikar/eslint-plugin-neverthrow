@@ -1,6 +1,9 @@
 {
   "name": "@ornikar/eslint-plugin-neverthrow",
-  "version": "0.0.0-development",
+  "version": "1.2.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=14.17"
   },
