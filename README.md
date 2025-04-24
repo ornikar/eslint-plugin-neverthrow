@@ -1,14 +1,11 @@
 # eslint-plugin-neverthrow
 
-[![npm version](https://img.shields.io/npm/v/eslint-plugin-neverthrow.svg)](https://www.npmjs.com/package/eslint-plugin-neverthrow)
-[![Downloads/month](https://img.shields.io/npm/dm/eslint-plugin-neverthrow.svg)](http://www.npmtrends.com/eslint-plugin-neverthrow)
-
 ## Installation
 
 Use [npm](https://www.npmjs.com/) or a compatibility tool to install.
 
 ```bash
-npm install --save-dev eslint eslint-plugin-neverthrow @typescript-eslint/parser
+npm install --save-dev eslint @ornikar/eslint-plugin-neverthrow @typescript-eslint/parser
 ```
 
 ### Requirements
@@ -61,7 +58,7 @@ This plugin follows [Semantic Versioning](http://semver.org/) and [ESLint's Sema
 
 ## Changelog
 
-- [GitHub Releases](https://github.com/mdbetancourt/eslint-plugin-neverthrow/releases)
+- [GitHub Releases](https://github.com/ornikar/eslint-plugin-neverthrow/releases)
 
 ## Contributing
 
