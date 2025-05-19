@@ -17,15 +17,26 @@ const resultSelector = matchAny([
 ]);
 
 const resultProperties = [
-  'mapErr',
-  'map',
+  'andTee',
   'andThen',
+  'andThrough',
+  'map',
+  'mapErr',
+  'match',
   'orElse',
+  'orTee',
+  'unwrapOr',
+];
+
+const handledMethods = [
+  '_unsafeUnwrap',
+  '_unsafeUnwrapErr',
+  'isErr',
+  'isOk',
   'match',
   'unwrapOr',
 ];
 
-const handledMethods = ['match', 'unwrapOr', '_unsafeUnwrap', 'isErr', 'isOk'];
 const handledProperties = ['error', 'value'];
 
 // evalua dentro de la expresion si es result
@@ -204,7 +215,7 @@ const rule: TSESLint.RuleModule<MessageIds, []> = {
     },
     messages: {
       mustUseResult:
-        'Result must be handled with either of match, unwrapOr or _unsafeUnwrap. It can be handled manually using isErr or isOk.',
+        'Result must be handled with either of match, unwrapOr, _unsafeUnwrap or _unsafeUnwrapErr. It can be handled manually using isErr or isOk.',
     },
     schema: [],
     type: 'problem',

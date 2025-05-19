@@ -18,12 +18,17 @@ interface IResult<T, E> {
   mapErr<U>(f: (e: E) => U): Result<T, U>;
   andThen<R extends Result<unknown, unknown>>(f: (t: T) => R): Result<InferOkTypes<R>, InferErrTypes<R> | E>;
   andThen<U, F>(f: (t: T) => Result<U, F>): Result<U, E | F>;
-  orElse<R extends Result<unknown, unknown>>(f: (e: E) => R): Result<T, InferErrTypes<R>>;
-  orElse<A>(f: (e: E) => Result<T, A>): Result<T, A>;
+  andTee(f: (t: T) => unknown): Result<T, E>;
+  orTee(f: (t: E) => unknown): Result<T, E>;
+  andThrough<R extends Result<unknown, unknown>>(f: (t: T) => R): Result<T, InferErrTypes<R> | E>;
+  andThrough<F>(f: (t: T) => Result<unknown, F>): Result<T, E | F>;
+  orElse<R extends Result<unknown, unknown>>(f: (e: E) => R): Result<InferOkTypes<R> | T, InferErrTypes<R>>;
+  orElse<U, A>(f: (e: E) => Result<U, A>): Result<U | T, A>;
   asyncAndThen<U, F>(f: (t: T) => ResultAsync<U, F>): ResultAsync<U, E | F>;
   asyncMap<U>(f: (t: T) => Promise<U>): ResultAsync<U, E>;
   unwrapOr<A>(v: A): T | A;
-  match<A>(ok: (t: T) => A, err: (e: E) => A): A;
+  match<A, B = A>(ok: (t: T) => A, err: (e: E) => B): A | B;
+  safeUnwrap(): Generator<Err<never, E>, T>;
   _unsafeUnwrap(config?: ErrorConfig): T;
   _unsafeUnwrapErr(config?: ErrorConfig): E;
 }
@@ -37,14 +42,22 @@ declare class Ok<T, E> implements IResult<T, E> {
   mapErr<U>(_f: (e: E) => U): Result<T, U>;
   andThen<R extends Result<unknown, unknown>>(f: (t: T) => R): Result<InferOkTypes<R>, InferErrTypes<R> | E>;
   andThen<U, F>(f: (t: T) => Result<U, F>): Result<U, E | F>;
-  orElse<R extends Result<unknown, unknown>>(_f: (e: E) => R): Result<T, InferErrTypes<R>>;
-  orElse<A>(_f: (e: E) => Result<T, A>): Result<T, A>;
+  andThrough<R extends Result<unknown, unknown>>(f: (t: T) => R): Result<T, InferErrTypes<R> | E>;
+  andThrough<F>(f: (t: T) => Result<unknown, F>): Result<T, E | F>;
+  andTee(f: (t: T) => unknown): Result<T, E>;
+  orTee(_f: (t: E) => unknown): Result<T, E>;
+  orElse<R extends Result<unknown, unknown>>(_f: (e: E) => R): Result<InferOkTypes<R> | T, InferErrTypes<R>>;
+  orElse<U, A>(_f: (e: E) => Result<U, A>): Result<U | T, A>;
   asyncAndThen<U, F>(f: (t: T) => ResultAsync<U, F>): ResultAsync<U, E | F>;
+  asyncAndThrough<R extends ResultAsync<unknown, unknown>>(f: (t: T) => R): ResultAsync<T, InferAsyncErrTypes<R> | E>;
+  asyncAndThrough<F>(f: (t: T) => ResultAsync<unknown, F>): ResultAsync<T, E | F>;
   asyncMap<U>(f: (t: T) => Promise<U>): ResultAsync<U, E>;
   unwrapOr<A>(_v: A): T | A;
-  match<A>(ok: (t: T) => A, _err: (e: E) => A): A;
+  match<A, B = A>(ok: (t: T) => A, _err: (e: E) => B): A | B;
+  safeUnwrap(): Generator<Err<never, E>, T>;
   _unsafeUnwrap(_?: ErrorConfig): T;
   _unsafeUnwrapErr(config?: ErrorConfig): E;
+  [Symbol.iterator](): Generator<Err<never, E>, T>;
 }
 
 declare class Err<T, E> implements IResult<T, E> {
@@ -54,16 +67,22 @@ declare class Err<T, E> implements IResult<T, E> {
   isErr(): this is Err<T, E>;
   map<A>(_f: (t: T) => A): Result<A, E>;
   mapErr<U>(f: (e: E) => U): Result<T, U>;
+  andThrough<F>(_f: (t: T) => Result<unknown, F>): Result<T, E | F>;
+  andTee(_f: (t: T) => unknown): Result<T, E>;
+  orTee(f: (t: E) => unknown): Result<T, E>;
   andThen<R extends Result<unknown, unknown>>(_f: (t: T) => R): Result<InferOkTypes<R>, InferErrTypes<R> | E>;
   andThen<U, F>(_f: (t: T) => Result<U, F>): Result<U, E | F>;
-  orElse<R extends Result<unknown, unknown>>(f: (e: E) => R): Result<T, InferErrTypes<R>>;
-  orElse<A>(f: (e: E) => Result<T, A>): Result<T, A>;
+  orElse<R extends Result<unknown, unknown>>(f: (e: E) => R): Result<InferOkTypes<R> | T, InferErrTypes<R>>;
+  orElse<U, A>(f: (e: E) => Result<U, A>): Result<U | T, A>;
   asyncAndThen<U, F>(_f: (t: T) => ResultAsync<U, F>): ResultAsync<U, E | F>;
+  asyncAndThrough<F>(_f: (t: T) => ResultAsync<unknown, F>): ResultAsync<T, E | F>;
   asyncMap<U>(_f: (t: T) => Promise<U>): ResultAsync<U, E>;
   unwrapOr<A>(v: A): T | A;
-  match<A>(_ok: (t: T) => A, err: (e: E) => A): A;
+  match<A, B = A>(_ok: (t: T) => A, err: (e: E) => B): A | B;
+  safeUnwrap(): Generator<Err<never, E>, T>;
   _unsafeUnwrap(config?: ErrorConfig): T;
   _unsafeUnwrapErr(_?: ErrorConfig): E;
+  [Symbol.iterator](): Generator<Err<never, E>, T>;
 }
 
 declare function getResult(): Result<string, Error>
