@@ -1,4 +1,4 @@
-# eslint-plugin-neverthrow
+# @ornikar/eslint-plugin-neverthrow
 
 ## Installation
 
@@ -20,9 +20,9 @@ Write your config file such as `.eslintrc.js`.
 
 ```js
 module.exports = {
-  plugins: ['neverthrow'],
+  plugins: ['@ornikar/neverthrow'],
   rules: {
-    'neverthrow/must-use-result': 'error',
+    '@ornikar/neverthrow/must-use-result': 'error',
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -38,7 +38,7 @@ See also [Configuring ESLint](https://eslint.org/docs/user-guide/configuring).
 
 ## Configs
 
-- `neverthrow/recommended` ... enables the recommended rules.
+- `@ornikar/neverthrow/recommended` ... enables the recommended rules.
 
 ## Rules
 
@@ -46,9 +46,9 @@ See also [Configuring ESLint](https://eslint.org/docs/user-guide/configuring).
 
 ### Possible Errors
 
-| Rule ID                                                       | Description                                                                                |     |
-| :------------------------------------------------------------ | :----------------------------------------------------------------------------------------- | :-: |
-| [neverthrow/must-use-result](./docs/rules/must-use-result.md) | Not handling neverthrow result is a possible error because errors could remain unhandleds. | ⭐️ |
+| Rule ID                                                                | Description                                                                                |     |
+| :--------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- | :-: |
+| [@ornikar/neverthrow/must-use-result](./docs/rules/must-use-result.md) | Not handling neverthrow result is a possible error because errors could remain unhandleds. | ⭐️ |
 
 <!--RULE_TABLE_END-->
 

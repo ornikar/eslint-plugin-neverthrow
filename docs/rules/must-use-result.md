@@ -1,7 +1,7 @@
-# neverthrow/must-use-result
+# @ornikar/neverthrow/must-use-result
 
 > Not handling neverthrow result is a possible error because errors could remain unhandleds.
-> ⭐️ This rule is included in `plugin:neverthrow/recommended` preset.
+> ⭐️ This rule is included in `plugin:@ornikar/neverthrow/recommended` preset.
 
 ## Rule Details
 
@@ -10,7 +10,7 @@ This rule aimed at disallowing `Results` without handling.
 Examples of **incorrect** code:
 
 ```js
-/*eslint neverthrow/must-use-result: error */
+/*eslint @ornikar/neverthrow/must-use-result: error */
 
 // result without unwrapOr, match or any error handler
 const result = getResult();
@@ -24,7 +24,7 @@ externaFunction(v);
 Examples of **correct** code:
 
 ```js
-/*eslint neverthrow/must-use-result: error */
+/*eslint @ornikar/neverthrow/must-use-result: error */
 
 const result = getResult();
 
